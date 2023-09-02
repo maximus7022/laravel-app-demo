@@ -1,13 +1,12 @@
 pipeline{
     agent any
     stages{
-        stage("Pre-build actions"){
-            steps{
-                echo "Stopping and removing previous containers and images..."
-                sh "docker rmi maximus7022/laravel-app"
-                echo "OK"
-            }
-        }
+        // stage("Pre-build actions"){
+        //     steps{
+        //         echo "Stopping and removing previous containers and images..."
+        //         echo "OK"
+        //     }
+        // }
         stage("Building image"){
             steps{
                 echo "Building app image..."
@@ -15,7 +14,7 @@ pipeline{
                 echo "OK"
             }
         }
-        stage("Publishing to DockerHub"){
+        stage("DockerHub Authentication"){
             steps{
                 echo "Logging to DockerHub..."
                 withCredentials([usernamePassword(credentialsId: 'DockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
@@ -24,10 +23,17 @@ pipeline{
                 echo "OK"
             }
         }
-        stage("Pushing to DockerHub"){
+        stage("Publishing to DockerHub"){
             steps{
                 echo "Pushing to DockerHub..."
                 sh "docker push maximus7022/laravel-app:1.${BUILD_NUMBER}"
+                echo "OK"
+            }
+        }
+        stage("Cleaning up"){
+            steps{
+                echo "Removing unused containers and images..."
+                sh "docker system prune"
                 echo "OK"
             }
         }
