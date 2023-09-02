@@ -4,9 +4,19 @@ WORKDIR /var/www/html/
 
 COPY . /var/www/html/
 
-RUN apk update && \
-    apk add libpng-dev zlib1g-dev libxml2-dev libzip-dev libonig-dev libpq-dev zip curl unzip && \
-    docker-php-ext-configure gd && \
+RUN apk update && \ 
+    apk add --no-cache libpng-dev \
+    zlib1g-dev \
+    libxml2-dev \
+    libzip-dev \
+    libonig-dev \
+    libonig-dev \
+    libpq-dev \
+    zip \
+    curl \
+    unzip
+
+RUN docker-php-ext-configure gd && \
     docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql && \
     docker-php-ext-install -j$(nproc) gd && \
     docker-php-ext-install pdo_mysql && \
