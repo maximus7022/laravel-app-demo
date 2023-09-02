@@ -1,7 +1,11 @@
-FROM php:8.2-alpine
+FROM php:8.1.23-zts-alpine3.18
 
-WORKDIR /usr/src/app/
+WORKDIR /var/www/html/
 
-COPY . /usr/src/app/
+COPY . /var/www/html/
+
+RUN apk update 
+RUN curl -sS https://getcomposer.org/installer | php -- --version=1.10.26 --install-dir=/usr/local/bin --filename=composer
+RUN composer install
 
 CMD ["php", "artisan", "serve"]
