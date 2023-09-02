@@ -8,7 +8,7 @@ COPY . .
 # updating and installing composer
 RUN apk update && \
     curl -sS https://getcomposer.org/installer | php -- --version=2.4.3 --install-dir=/usr/local/bin --filename=composer && \
-    composer install
+    composer install --classmap-authoritative
 
 # generating new project key
 RUN cp .env.example .env && \
