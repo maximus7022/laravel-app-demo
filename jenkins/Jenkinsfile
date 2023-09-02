@@ -5,7 +5,7 @@ pipeline{
             steps{
                 echo "Stopping and removing previous containers and images..."
                 // sh "docker-compose down"
-                sh "docker rmi maximus7022/laravel-app"
+                // sh "docker rmi laravel-app"
                 echo "OK"
             }
         }
@@ -13,7 +13,7 @@ pipeline{
             steps{
                 echo "Building app image..."
                 sh "docker-compose build"
-                sh "docker tag maximus7022/laravel-app maximus7022/laravel-app:1.${BUILD_NUMBER}"
+                sh "docker tag laravel-app maximus7022/laravel-app:1.${BUILD_NUMBER}"
                 echo "OK"
             }
         }
@@ -28,7 +28,9 @@ pipeline{
         }
         stage("Pushing to DockerHub"){
             steps{
+                echo "Pushing to DockerHub..."
                 sh "docker push maximus7022/laravel-app:1.${BUILD_NUMBER}"
+                echo "OK"
             }
         }
         // stage("Running app"){

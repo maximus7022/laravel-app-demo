@@ -4,7 +4,6 @@ services:
   laravel-app:
     build:
       context: ./
-    image: maximus7022/laravel-app
     container_name: laravel-app
     restart: always
     ports:
