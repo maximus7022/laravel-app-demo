@@ -5,8 +5,8 @@ WORKDIR /var/www/html/
 
 COPY . /var/www/html/
 
-RUN apk update && \ 
-    apk add --no-cache libpng-dev \
+RUN apt-get update && apt-get install -y \ 
+    libpng-dev \
     zlib1g-dev \
     libxml2-dev \
     libzip-dev \
