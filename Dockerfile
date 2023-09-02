@@ -7,12 +7,13 @@ COPY . .
 RUN apk update
 
 RUN curl -sS https://getcomposer.org/installer | php -- --version=2.4.3 --install-dir=/usr/local/bin --filename=composer
-RUN composer install
+RUN composer update && \
+    composer install
 
 RUN cp .env.example .env && \
     php artisan key:generate
 
-RUN php artisan serve
+RUN nohup php artisan serve
 RUN ./vendor/bin/phpunit
 CMD echo "AUE"
 # CMD ["php", "artisan", "serve"]
