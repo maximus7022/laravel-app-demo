@@ -8,4 +8,4 @@ services:
     container_name: laravel-app
     restart: always
     ports:
-      - 8000:8000
+      - 8888:5000
