@@ -34,6 +34,7 @@ pipeline{
             steps{
                 echo "Removing unused containers and images..."
                 sh "docker system prune --volumes -f"
+                sh "docker image prune -a"
                 echo "OK"
             }
         }
