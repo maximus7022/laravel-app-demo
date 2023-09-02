@@ -4,7 +4,7 @@ pipeline{
         stage("Pre-build actions"){
             steps{
                 echo "Stopping and removing previous containers and images..."
-                // sh "docker rmi maximus7022/laravel-app"
+                sh "docker rmi maximus7022/laravel-app"
                 echo "OK"
             }
         }
