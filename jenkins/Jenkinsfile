@@ -13,7 +13,7 @@ pipeline{
             steps{
                 echo "Building app image..."
                 sh "docker-compose build"
-                sh "docker tag laravel-app maximus7022/laravel-app:1.${BUILD_NUMBER}"
+                sh "docker tag laravel-pipeline maximus7022/laravel-app:1.${BUILD_NUMBER}"
                 echo "OK"
             }
         }

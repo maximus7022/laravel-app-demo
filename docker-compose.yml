@@ -4,7 +4,6 @@ services:
   laravel-app:
     build:
       context: ./
-    container_name: laravel-app
     restart: always
     ports:
       - 8888:5000
