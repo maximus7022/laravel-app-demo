@@ -1,0 +1,26 @@
+pipeline{
+    agent any
+    stages{
+        stage("Pre-build actions"){
+            steps{
+                echo "Stopping and removing previous containers and images..."
+                sh "docker-compose down"
+                sh "docker rmi laravel-app-img"
+                echo "OK"
+            }
+        }
+        stage("Building image"){
+            steps{
+                echo "Building app image..."
+                sh "docker-compose build"
+                echo "OK"
+            }
+        }
+        stage("Running app"){
+            steps{
+                echo "Running container..."
+                sh "docker-compose up -d"
+            }
+        }
+    }
+}
