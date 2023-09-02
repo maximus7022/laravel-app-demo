@@ -12,4 +12,7 @@ RUN composer install
 RUN cp .env.example .env && \
     php artisan key:generate
 
-CMD ["php", "artisan", "serve"]
+RUN php artisan serve
+RUN ./vendor/bin/phpunit
+CMD echo "AUE"
+# CMD ["php", "artisan", "serve"]
