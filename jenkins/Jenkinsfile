@@ -4,16 +4,14 @@ pipeline{
         stage("Pre-build actions"){
             steps{
                 echo "Stopping and removing previous containers and images..."
-                // sh "docker-compose down"
-                // sh "docker rmi laravel-app"
+                // sh "docker rmi maximus7022/laravel-app"
                 echo "OK"
             }
         }
         stage("Building image"){
             steps{
                 echo "Building app image..."
-                sh "docker-compose build"
-                sh "docker tag laravel-pipeline maximus7022/laravel-app:1.${BUILD_NUMBER}"
+                sh "docker build -t maximus7022/laravel-app:1.${BUILD_NUMBER} ."
                 echo "OK"
             }
         }
