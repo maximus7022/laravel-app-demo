@@ -1,0 +1,11 @@
+version: '3.3'
+
+services:
+  laravel-app:
+    build:
+      context: ./
+    image: laravel-app-img
+    container_name: laravel-app
+    restart: always
+    ports:
+      - 8000:8000
