@@ -1,9 +1,9 @@
 pipeline{
     environment{
-        STOP = "/usr/bin/docker stop \$(docker ps -a -q)"
-        PRUNE = "/usr/bin/docker system prune -a --volumes -f"
-        PULL = "/usr/bin/docker pull maximus7022/laravel-app:1.${BUILD_NUMBER}"
-        RUN = "/usr/bin/docker run -d -p 8888:5000 --name laravel_app maximus7022/laravel-app:1.${BUILD_NUMBER}"
+        // STOP = "docker stop \$(docker ps -a -q)"
+        PRUNE = "docker system prune -a --volumes -f"
+        PULL = "docker pull maximus7022/laravel-app:1.${BUILD_NUMBER}"
+        RUN = "docker run -d -p 8888:5000 --name laravel_app maximus7022/laravel-app:1.${BUILD_NUMBER}"
     }
     agent any
     stages{
@@ -45,7 +45,7 @@ pipeline{
                     string(credentialsId: 'laravel_production_ip', variable: 'PROD_IP')
                 ]){
                     sshagent(['production_key']) {
-                        sh '''ssh -o StrictHostKeyChecking=no ${PROD_USER}@${PROD_IP} "${STOP} && \\ ${PRUNE}"'''
+                        sh '''ssh -o StrictHostKeyChecking=no ${PROD_USER}@${PROD_IP} "${PRUNE}"'''
                     }
                 }
             }
