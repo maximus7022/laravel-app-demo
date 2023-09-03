@@ -45,7 +45,7 @@ pipeline{
                     string(credentialsId: 'laravel_production_ip', variable: 'PROD_IP')
                 ]){
                     sshagent(['production-key']) {
-                        sh "ssh -o StrictHostKeyChecking=no ${PROD_USER}@${PROD_IP} '${STOP} && \ ${PRUNE}'"
+                        sh '''ssh -o StrictHostKeyChecking=no ${PROD_USER}@${PROD_IP} "${STOP} && \ ${PRUNE}"'''
                     }
                 }
             }
@@ -58,7 +58,7 @@ pipeline{
                     string(credentialsId: 'laravel_production_ip', variable: 'PROD_IP')
                 ]){
                     sshagent(['production-key']) {
-                        sh "ssh -o StrictHostKeyChecking=no ${PROD_USER}@${PROD_IP} '${PULL} && \ ${RUN}'"
+                        sh '''ssh -o StrictHostKeyChecking=no ${PROD_USER}@${PROD_IP} "${PULL} && \ ${RUN}"'''
                     }
                 }
             }
