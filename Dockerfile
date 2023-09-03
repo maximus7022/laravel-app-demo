@@ -8,7 +8,8 @@ COPY . .
 # updating and installing composer
 RUN apk update && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
-    composer update && \
+    # composer self-update && \
+    # composer update && \
     composer install --prefer-dist --no-dev -o
 
 # generating new project key
