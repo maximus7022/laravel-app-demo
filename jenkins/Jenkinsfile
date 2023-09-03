@@ -1,54 +1,67 @@
 pipeline{
     agent any
     stages{
-        // stage("Pre-build actions"){
-        //     steps{
-        //         echo "Stopping and removing previous containers and images..."
-        //         echo "OK"
-        //     }
-        // }
-        // stage("Building image"){
-        //     steps{
-        //         echo "Building app image..."
-        //         sh "docker build -t maximus7022/laravel-app:1.${BUILD_NUMBER} ."
-        //         echo "OK"
-        //     }
-        // }
-        // stage("DockerHub Authentication"){
-        //     steps{
-        //         echo "Logging to DockerHub..."
-        //         withCredentials([usernamePassword(credentialsId: 'DockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-        //             sh '''docker login -u $USERNAME -p $PASSWORD'''
-        //         }
-        //         echo "OK"
-        //     }
-        // }
-        // stage("Publishing to DockerHub"){
-        //     steps{
-        //         echo "Pushing to DockerHub..."
-        //         sh "docker push maximus7022/laravel-app:1.${BUILD_NUMBER}"
-        //         echo "OK"
-        //     }
-        // }
-        // stage("Cleaning up"){
-        //     steps{
-        //         echo "Removing unused containers and images..."
-        //         sh "docker system prune --volumes -f"
-        //         sh "docker image prune -a -f"
-        //         echo "OK"
-        //     }
-        // }
-        stage("Starting next job"){
+        stage("Building image"){
             steps{
-                build job: "laravel-run-job", parameters: 
-                [[$class: 'StringParameterValue', name: 'BUILD_NUM', value: '${BUILD_NUMBER}']]
+                echo "Building app image..."
+                sh "docker build -t maximus7022/laravel-app:1.${BUILD_NUMBER} ."
+                echo "OK"
             }
         }
-        // stage("Running app"){
-        //     steps{
-        //         echo "Running container..."
-        //         sh "docker-compose up -d"
-        //     }
-        // }
+        stage("DockerHub Authentication"){
+            steps{
+                echo "Logging to DockerHub..."
+                withCredentials([usernamePassword(credentialsId: 'DockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh '''docker login -u $USERNAME -p $PASSWORD'''
+                }
+                echo "OK"
+            }
+        }
+        stage("Publishing to DockerHub"){
+            steps{
+                echo "Pushing to DockerHub..."
+                sh "docker push maximus7022/laravel-app:1.${BUILD_NUMBER}"
+                echo "OK"
+            }
+        }
+        stage("Cleaning build environment"){
+            steps{
+                echo "Removing unused images..."
+                sh "docker system prune -a --volumes -f"
+                echo "OK"
+            }
+        }
+        stage("Cleaning production environment"){
+            steps{
+                echo "Removing old containers and images..."
+
+                def stop_and_prune = "docker stop $(docker ps -a -q) && \
+                                    docker system prune -a --volumes -f"
+
+                withCredentials([
+                    string(credentialsId: 'laravel_production_user', variable: 'PROD_USER'),
+                    string(credentialsId: 'laravel_production_ip', variable: 'PROD_IP')
+                ]){
+                    sshagent(['production-key']) {
+                        sh "ssh -o StrictHostKeyChecking=no ${PROD_USER}@${PROD_IP} '${stop_and_prune}'"
+                    }
+                }
+            }
+        }
+        stage("Remote project deployment"){
+            steps{
+                def pull_and_run = "docker pull maximus7022/laravel-app:1.${BUILD_NUMBER} && \
+                                    docker run -d -p 8888:5000 --name laravel_app maximus7022/laravel-app:1.${BUILD_NUMBER}"
+
+                withCredentials([
+                    string(credentialsId: 'laravel_production_user', variable: 'PROD_USER'),
+                    string(credentialsId: 'laravel_production_ip', variable: 'PROD_IP')
+                ]){
+                    sshagent(['production-key']) {
+                        sh "ssh -o StrictHostKeyChecking=no ${PROD_USER}@${PROD_IP} '${pull_and_run}'"
+                    }
+                }
+            }
+        }
     }
 }
