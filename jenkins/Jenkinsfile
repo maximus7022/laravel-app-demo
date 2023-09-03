@@ -35,7 +35,7 @@ pipeline{
             steps{
                 echo "Removing old containers and images..."
 
-                def stop_and_prune = "docker stop $(docker ps -a -q) && \
+                def stop_and_prune = "docker stop \$(docker ps -a -q) && \
                                     docker system prune -a --volumes -f"
 
                 withCredentials([
