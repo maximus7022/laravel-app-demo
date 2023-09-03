@@ -32,12 +32,10 @@ pipeline{
             }
         }
         stage("Cleaning production environment"){
+            def stop_and_prune = "docker stop \$(docker ps -a -q) && \
+                                docker system prune -a --volumes -f"
             steps{
                 echo "Removing old containers and images..."
-
-                def stop_and_prune = "docker stop \$(docker ps -a -q) && \
-                                    docker system prune -a --volumes -f"
-
                 withCredentials([
                     string(credentialsId: 'laravel_production_user', variable: 'PROD_USER'),
                     string(credentialsId: 'laravel_production_ip', variable: 'PROD_IP')
@@ -49,10 +47,10 @@ pipeline{
             }
         }
         stage("Remote project deployment"){
+            def pull_and_run = "docker pull maximus7022/laravel-app:1.${BUILD_NUMBER} && \
+                                docker run -d -p 8888:5000 --name laravel_app maximus7022/laravel-app:1.${BUILD_NUMBER}"
             steps{
-                def pull_and_run = "docker pull maximus7022/laravel-app:1.${BUILD_NUMBER} && \
-                                    docker run -d -p 8888:5000 --name laravel_app maximus7022/laravel-app:1.${BUILD_NUMBER}"
-
+                echo "Pulling image and running container..."
                 withCredentials([
                     string(credentialsId: 'laravel_production_user', variable: 'PROD_USER'),
                     string(credentialsId: 'laravel_production_ip', variable: 'PROD_IP')
