@@ -47,7 +47,7 @@ pipeline{
                     sshagent(['production_key']) {
                         // sh "ssh -o StrictHostKeyChecking=no ${PROD_USER}@${PROD_IP} '${STOP}'"
                         // sh "ssh -o StrictHostKeyChecking=no ${PROD_USER}@${PROD_IP} '${PRUNE}'"
-                        sh "${STOP}"
+                        // sh "${STOP}"
                         sh "${PRUNE}"
                     }
                 }
