@@ -3,7 +3,7 @@ pipeline{
         STOP = "docker stop \$(docker ps -a -q)"
         PRUNE = "docker system prune -a --volumes -f"
         PULL = "docker pull maximus7022/laravel-app:1.${BUILD_NUMBER}"
-        RUN = "docker run -d -p 80:5000 --name laravel_app maximus7022/laravel-app:1.${BUILD_NUMBER}"
+        RUN = "docker run -d -p 443:5000 --name laravel_app maximus7022/laravel-app:1.${BUILD_NUMBER}"
     }
     agent any
     stages{
