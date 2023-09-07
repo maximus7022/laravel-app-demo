@@ -11,7 +11,7 @@
 <body>
     <section class="showcase">
         <header>
-            <h2 class="logo">Maxim Pashynkyi's</h2>
+            <h2 class="logo">Oleg Pupkin's</h2>
             <div class="toggle"></div>
         </header>
         <video src="{{asset('video/bg.mp4')}}" muted loop autoplay></video>
