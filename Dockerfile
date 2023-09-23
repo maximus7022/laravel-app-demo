@@ -2,7 +2,7 @@ FROM php:8.1.23-zts-alpine3.18
 
 WORKDIR /var/www/html/
 
-# copying project
+# copying project to workdir
 COPY . .
 
 # updating and installing composer
